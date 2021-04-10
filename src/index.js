@@ -4,6 +4,7 @@ const database = require('./db');
 const morgan = require('morgan');
 const { router } = require('./routes/user.routes');
 const { car_router } = require('./routes/car.routes');
+const { rent_router } = require('./routes/rent.routes');
 const app = express();
 
 //Settings
@@ -16,6 +17,7 @@ app.use(morgan('dev'));
 //Routes
 app.use('/users', router);
 app.use('/cars', car_router);
+app.use('/rents', rent_router);
 
 //Run server
 async function main() {
