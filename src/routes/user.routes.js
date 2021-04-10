@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
     const db = await connect();
     const users = await db.collection('users').find({}).toArray();
     console.log(users);
-    res.json(users);
+    res.json(users); 
 });
 
 router.get('/:id', async (req, res) => {
