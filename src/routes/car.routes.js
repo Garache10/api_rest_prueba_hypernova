@@ -21,11 +21,10 @@ car_router.get('/one/:id', async (req, res) => {
         res.json(car);
     } catch (error) {
         console.log(error);
-        res.json({
-            message: 'not found'
+        res.status(404).json({
+            message: 'car not found'
         });
     }
-    
 });
 
 car_router.post('/', async (req, res) => {
