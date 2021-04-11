@@ -1,17 +1,17 @@
 const express = require('express');
-const router = express.Router();
+const user_router = express.Router();
 const { ObjectID } = require('mongodb');
 const { connect } = require('../db');
 
 //Routes to users
-router.get('/', async (req, res) => {
+user_router.get('/', async (req, res) => {
     const db = await connect();
     const users = await db.collection('users').find({}).toArray();
     console.log(users);
     res.json(users); 
 });
 
-router.get('/:id', async (req, res) => {
+user_router.get('/:id', async (req, res) => {
     const id = req.params.id
     const db = await connect();
     const user = await db.collection('users').findOne({
@@ -20,7 +20,7 @@ router.get('/:id', async (req, res) => {
     res.json(user);
 });
 
-router.post('/', async (req, res) => {
+user_router.post('/', async (req, res) => {
     const db = await connect();
     const user = {
         nombre: req.body.nombre,
@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     res.json(result.ops[0]);
 });
 
-router.delete('/:id', async (req, res) => {
+user_router.delete('/:id', async (req, res) => {
     const id = req.params.id;
     const db = await connect();
     await db.collection('users').deleteOne({
@@ -41,7 +41,7 @@ router.delete('/:id', async (req, res) => {
     });
 });
 
-router.put('/:id', async (req, res) => {
+user_router.put('/:id', async (req, res) => {
     const id = req.params.id;
     const user = {
         nombre: req.body.nombre,
@@ -59,5 +59,5 @@ router.put('/:id', async (req, res) => {
 });
 
 module.exports = {
-    router
+    user_router
 }
