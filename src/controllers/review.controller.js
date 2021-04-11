@@ -39,17 +39,6 @@ const deleteReview = async (req, res) => {
     });
 }
 
-async (req, res) => {
-    const id = req.params.id;
-    const db = await connect();
-    await db.collection('reviews').deleteOne({
-        _id: ObjectID(id)
-    });
-    res.json({
-        message: `review ${id} has deleted`
-    });
-}
-
 const updateReview = async (req, res) => {
     const id = req.params.id;
     const review = {
@@ -68,10 +57,20 @@ const updateReview = async (req, res) => {
     });
 }
 
+const getReviewByRent = async (req, res) => {
+    const id = req.params.id
+    const db = await connect();
+    const review = await db.collection('reviews').findOne({
+        rent: id
+    });
+    res.json(review);
+}
+
 module.exports = {
     getAllReviews,
     getReviewById,
     insertReview,
     deleteReview,
-    updateReview
+    updateReview,
+    getReviewByRent
 }
