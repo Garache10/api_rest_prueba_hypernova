@@ -6,6 +6,3 @@
 ### -> Postman (Pruebas y testeo de endpoints)
 
 ## La prueba realizada se encuentra en la rama Master
-
-#### Endpoints
-sjhjfhjshfjskf
