@@ -1,3 +1,4 @@
+const { json } = require('express');
 const express = require('express');
 const car_router = express.Router();
 const { ObjectID } = require('mongodb');
@@ -114,18 +115,30 @@ async function changeDispo (car) {
         }, {
             $set: car_s
         });
-        /*res.json({
-            message: `car ${id} has updated`
-        });*/    
     } catch (error) {
         console.log(error);
-        /*res.json(500, {
-            message: 'Car not updated'
-        });*/
+    }
+};
+
+//function to change disponibilidad to car when rent is finished
+async function changeNoDispo (id) {
+    try {
+        const db = await connect();
+        const car_s = {
+            disponibilidad: 'Disponible'
+        }
+        await db.collection('cars').updateOne({
+            _id: ObjectID(id)
+        }, {
+            $set: car_s
+        });
+    } catch (error) {
+        console.log(error);
     }
 };
 
 module.exports = {
     car_router,
-    changeDispo
+    changeDispo,
+    changeNoDispo
 }

@@ -1,6 +1,6 @@
 const express = require('express');
 const rent_router = express.Router();
-const { changeDispo } = require('./car.routes');
+const { changeDispo, changeNoDispo } = require('./car.routes');
 const { ObjectID } = require('mongodb');
 const { connect } = require('../db');
 
@@ -73,7 +73,8 @@ rent_router.put('/one/:id', async (req, res) => {
         const rent = {
             user: req.body.user,
             car: req.body.car,
-            days: req.body.days
+            days: req.body.days,
+            active: req.body.active
         };
         const db = await connect();
         await db.collection('rents').updateOne({
@@ -104,6 +105,32 @@ rent_router.get('/user/:id', async (req, res) => {
         console.log(error);
         res.status(404).json({
             message: 'There is not rents to this user'
+        });
+    }
+});
+
+//Endpoint to finish the rent
+rent_router.put('/finish/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const db = await connect();
+        const car = await db.collection('rents').findOne({_id: ObjectID(id)});
+        const rent = {
+            active: 'no'
+        };
+        await db.collection('rents').updateOne({
+            _id: ObjectID(id)
+        }, {
+            $set: rent
+        });
+        changeNoDispo(car.car);
+        res.json({
+            message: `rent ${id} is finished`
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'rent not updated'
         });
     }
 });

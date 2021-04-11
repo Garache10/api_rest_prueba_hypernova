@@ -1,6 +1,5 @@
 //Importing develop modules
 const express = require('express');
-const database = require('./db');
 const morgan = require('morgan');
 const { user_router } = require('./routes/user.routes');
 const { car_router } = require('./routes/car.routes');
