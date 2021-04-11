@@ -101,6 +101,31 @@ car_router.get('/available', async (req, res) => {
     }
 });
 
+//function to change disponibilidad to car after rent
+async function changeDispo (car) {
+    try {
+        const id = car;
+        const db = await connect();
+        const car_s = {
+            disponibilidad: 'No Disponible'
+        }
+        await db.collection('cars').updateOne({
+            _id: ObjectID(id)
+        }, {
+            $set: car_s
+        });
+        /*res.json({
+            message: `car ${id} has updated`
+        });*/    
+    } catch (error) {
+        console.log(error);
+        /*res.json(500, {
+            message: 'Car not updated'
+        });*/
+    }
+};
+
 module.exports = {
-    car_router
+    car_router,
+    changeDispo
 }
