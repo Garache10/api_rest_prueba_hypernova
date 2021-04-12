@@ -1,5 +1,6 @@
 const { ObjectID } = require('mongodb');
 const { connect } = require('../db');
+const jwt = require('jsonwebtoken');
 
 const getAllUsers = async (req, res) => {
     const db = await connect();
@@ -29,7 +30,9 @@ const insertUser = async (req, res) => {
         const db = await connect();
         const user = {
             nombre: req.body.nombre,
-            apellido: req.body.apellido
+            apellido: req.body.apellido,
+            usuario: req.body.usuario,
+            contrasena: req.body.contrasena
         };
         const result = await db.collection('users').insertOne(user);
         res.json(result.ops[0]);
@@ -64,7 +67,9 @@ const updateUser = async (req, res) => {
         const id = req.params.id;
         const user = {
             nombre: req.body.nombre,
-            apellido: req.body.apellido
+            apellido: req.body.apellido,
+            usuario: req.body.usuario,
+            contrasena: req.body.contrasena
         };
         const db = await connect();
         await db.collection('users').updateOne({
@@ -83,10 +88,39 @@ const updateUser = async (req, res) => {
     }
 }
 
+const login = async (req, res) => {
+    try {
+        const db = await connect();
+        const us = req.body.usuario;
+        const cn = req.body.contrasena;
+        const user = await db.collection('users').findOne({
+            usuario: us,
+            contrasena: cn
+        });
+        if(user == null){
+            res.json({
+                message: 'Autentificación fallida, vuelva a intentarlo'
+            });
+        } else {
+            jwt.sign({user: user}, 'secretkey', (error, token) => {
+                res.json({
+                    token: token
+                });
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.json({
+            message: 'Autentificación fallida, vuelva a intentarlo'
+        });
+    }
+}
+
 module.exports = {
     getAllUsers,
     getUserById,
     insertUser,
     deleteUser,
-    updateUser
+    updateUser,
+    login
 }

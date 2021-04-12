@@ -5,7 +5,8 @@ const {
     getUserById,
     insertUser,
     deleteUser,
-    updateUser
+    updateUser,
+    login
 } = require('../controllers/user.controller');
 
 //Routes to users
@@ -24,6 +25,10 @@ user_router.delete('/:id', deleteUser);
 
 // http://localhost:4095/users/:id
 user_router.put('/:id', updateUser);
+
+/* Inicio de sesión y autentificación de usuario con jwt
+http://localhost:4095/user/login/            */ 
+user_router.post('/login', login);
 
 module.exports = {
     user_router
